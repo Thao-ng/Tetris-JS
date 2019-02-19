@@ -6,10 +6,77 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
     <title>Tetris Game Js</title>
+    <style>
+        *,
+        *:after,
+        *:before
+        {
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+            background-repeat: no-repeat;
+            position: relative;
+        }
+
+        body {
+            background-color: #222222;
+        }
+
+        #container{
+            height: 700px;
+            background-size: cover;
+            background: url("./img/gameboy.svg");
+            background-position: center ;
+            background-repeat: no-repeat;
+            position: relative;
+
+        }
+
+        canvas {
+            position: absolute;
+            zoom: 0.70;
+            top: 137px;
+            right: 800px;
+        }
+
+        #score-display-bgc{
+            position: relative;
+        }
+        #score-display {
+            position: absolute;
+            right: 250px;
+            bottom: 590px;
+        }
+        #score
+        {
+            height:40px;
+            margin:10px auto;
+            font-size:20px;
+            text-align:center;
+            font-family: Consolas, monaco, monospace;
+            color:#f0f0f0;
+            right: 0px;
+        }
+
+
+        div {
+            color: white;
+            font-size: 20px;
+            font-family: Consolas, monaco, monospace;
+            font-weight: bolder;
+        }
+    </style>
 </head>
 <body>
-<canvas id="tetris" width="200" height="400"></canvas>
+<div id="container">
+    <canvas id="tetris" width="200" height="400"></canvas>
+</div>
 
+<div id="score-display-bgc">
+    <div id="score-display">
+        Score: <div id="score">0</div>
+    </div>
+</div>
 
 
 

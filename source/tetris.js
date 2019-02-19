@@ -6,10 +6,11 @@ document.addEventListener("DOMContentLoaded", function (event) {
     const ctx = cvs.getContext("2d");
     const scoreElement = document.getElementById("score");
 
+
     const ROW = 20;
     const COL = COLUMN = 10;
     const SQ = squareSize = 20;
-    const VACANT = "WHITE"; // color of an empty square
+    const VACANT = "white   "; // color of an empty square
 
 // draw a square
     function drawSquare(x,y,color){
@@ -160,6 +161,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     }
 
     let score = 0;
+    let level =1;
 
     Piece.prototype.lock = function(){
         for( r = 0; r < this.activeTetromino.length; r++){
@@ -197,15 +199,17 @@ document.addEventListener("DOMContentLoaded", function (event) {
                 for( c = 0; c < COL; c++){
                     board[0][c] = VACANT;
                 }
-                // add the score
-               // score += 10;
+                score += 10;
+
+
             }
         }
         // update the board
         drawBoard();
 
-        // update the score
-        //scoreElement.innerHTML = score;
+        // update the score and level
+        scoreElement.innerHTML = score;
+
     }
 
 // collision fucntion
