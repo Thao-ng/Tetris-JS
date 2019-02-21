@@ -103,7 +103,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     Piece.prototype.unDraw = function () {
         this.fill(VACANT);
     }
-
+//add some sound effects
     function playSound() {
         sound.play();
     }
@@ -172,8 +172,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
     }
 
     let score = 0;
-    let level = 1;
-
 
     Piece.prototype.lock = function () {
         for (r = 0; r < this.activeTetromino.length; r++) {
@@ -184,16 +182,15 @@ document.addEventListener("DOMContentLoaded", function (event) {
                 }
                 // pieces to lock on top = game over
                 if (this.y + r < 0) {
-                    $.growl.warning({message: "Game Over"});
-
                     gameOverSound.play();
+                    $.growl.warning({message: "Game Over:("});
+
                     // stop request animation frame
                     gameOver = true;
                     break;
                 }
                 // we lock the piece
                 board[this.y + r][this.x + c] = this.color;
-
             }
         }
         // remove full rows
