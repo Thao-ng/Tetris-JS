@@ -1,2 +1,3 @@
 # Tetris-JS
-Tetris game in java script
+Tetris game using Java Script with some sound effects
+
