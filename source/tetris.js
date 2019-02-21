@@ -11,13 +11,16 @@ document.addEventListener("DOMContentLoaded", function (event) {
     const COL = COLUMN = 10;
     const SQ = squareSize = 20;
     const VACANT = "white   "; // color of an empty square
+    const sound = document.getElementById("sound");
+    const gameOverSound = document.getElementById("gameover");
+
 
 // draw a square
     function drawSquare(x,y,color){
         ctx.fillStyle = color;
         ctx.fillRect(x*SQ,y*SQ,SQ,SQ);
 
-        ctx.strokeStyle = "BLACK";
+        ctx.strokeStyle = "transparent";
         ctx.strokeRect(x*SQ,y*SQ,SQ,SQ);
     }
 
@@ -103,6 +106,15 @@ document.addEventListener("DOMContentLoaded", function (event) {
         this.fill(VACANT);
     }
 
+    function playSound() {
+        sound.play();
+    }
+
+    function playGameOver(){
+        gameOverSound.play();
+    }
+
+
 // move Down the piece
 
     Piece.prototype.moveDown = function(){
@@ -113,6 +125,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         }else{
             // we lock the piece and generate a new one
             this.lock();
+            sound.play();
             p = randomPiece();
         }
 
@@ -163,56 +176,63 @@ document.addEventListener("DOMContentLoaded", function (event) {
     let score = 0;
     let level =1;
 
-    Piece.prototype.lock = function(){
-        for( r = 0; r < this.activeTetromino.length; r++){
-            for(c = 0; c < this.activeTetromino.length; c++){
-                // we skip the vacant squares
-                if( !this.activeTetromino[r][c]){
-                    continue;
-                }
-                // pieces to lock on top = game over
-                if(this.y + r < 0){
-                    alert("Game Over");
-                    // stop request animation frame
-                    gameOver = true;
-                    break;
-                }
-                // we lock the piece
-                board[this.y+r][this.x+c] = this.color;
-            }
-        }
-        // remove full rows
-        for(r = 0; r < ROW; r++){
-            let isRowFull = true;
-            for( c = 0; c < COL; c++){
-                isRowFull = isRowFull && (board[r][c] != VACANT);
-            }
-            if(isRowFull){
-                // if the row is full
-                // we move down all the rows above it
-                for( y = r; y > 1; y--){
-                    for( c = 0; c < COL; c++){
-                        board[y][c] = board[y-1][c];
+
+        Piece.prototype.lock = function(){
+            for( r = 0; r < this.activeTetromino.length; r++){
+                for(c = 0; c < this.activeTetromino.length; c++){
+                    // we skip the vacant squares
+                    if( !this.activeTetromino[r][c]){
+                        continue;
                     }
-                }
-                // the top row board[0][..] has no row above it
-                for( c = 0; c < COL; c++){
-                    board[0][c] = VACANT;
-                }
-                score += 10;
+                    // pieces to lock on top = game over
+                    if(this.y + r < 0){
+                        $.growl.warning({message: "Game Over" });
 
+                        gameOverSound.play();
+                        // stop request animation frame
+                        gameOver = true;
+                        break;
+                    }
+                    // we lock the piece
+                    board[this.y+r][this.x+c] = this.color;
 
+                }
             }
-        }
+            // remove full rows
+            for(r = 0; r < ROW; r++){
+                let isRowFull = true;
+                for( c = 0; c < COL; c++){
+                    isRowFull = isRowFull && (board[r][c] != VACANT);
+
+                }
+                if(isRowFull){
+                    // if the row is full
+                    // we move down all the rows above it
+                    for( y = r; y > 1; y--){
+                        for( c = 0; c < COL; c++){
+                            board[y][c] = board[y-1][c];
+                        }
+                    }
+                    // the top row board[0][..] has no row above it
+                    for( c = 0; c < COL; c++){
+                        board[0][c] = VACANT;
+                    }
+                    score += 10;
+
+
+                }
+            }
+
         // update the board
         drawBoard();
+
 
         // update the score and level
         scoreElement.innerHTML = score;
 
     }
 
-// collision fucntion
+// collision function
 
     Piece.prototype.collision = function(x,y,piece){
         for( r = 0; r < piece.length; r++){
@@ -268,7 +288,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     function drop(){
         let now = Date.now();
         let delta = now - dropStart;
-        if(delta > 1000){
+        if(delta > 200){
             p.moveDown();
             dropStart = Date.now();
         }
